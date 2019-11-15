@@ -5,39 +5,14 @@
  *     this.left = this.right = this.next = null;
  * }
  */
-function makeTempRoot (lroot, rroot) {
-    let root = {};
-    root.left = lroot.right;
-    root.right = rroot.left;
-    return root;
-}
-
-function goToNextLevel (root) {
-    if(root.left !== null){
-        if(root.right !== null) {
-            root.left.next = root.right;
-        }
-    }
-}
 
 var connect = function(root) {
-    let parent = root;
-    if (!root) return parent
-    let troot = null;
-    if(root.left !== null) {
-        if (root.right !== null) {
-            root.left.next = root.right;
-            troot = makeTempRoot(root.left, root.right);
-
-            if (troot !== null) {
-                goToNextLevel(troot);
-            }
-        }
-        connect(root.left)
-    }
-
-    if (root.right !== null) {
-        connect(root.right);
-    }
-    return parent
+    return connectChild(root,null)
 };
+var connectChild=function(root,next){
+    if (!root) return root;
+    root.next = next;
+    connectChild(root.left, root.right);
+    connectChild(root.right, (root.next ? root.next.left : root.next));
+    return root;
+}
